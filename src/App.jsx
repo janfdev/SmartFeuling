@@ -1,0 +1,226 @@
+import React, { useState } from 'react'
+import Navbar from "./component/navbar"
+import Menu from "./component/menu"
+import Content from './component/content'
+import { Button } from "@/components/ui/button"
+
+export const App = () => {
+  const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [darkMode, setDarkMode] = useState(false)
+
+  const navItems = [
+    {name: "Dashboard", icon: "📊"},
+    {name: "Project", icon: "🗂️"},
+    {name: "Calender", icon: "🗓️"},
+    {name: "Document", icon: "📄"},
+    {name: "Report", icon: "📈"},
+    ]
+  const cardItems = [
+    {name: "Dashboard", content: "📊"},
+    {name: "Project", content: "🗂️"},
+    {name: "Calender", content: "🗓️"},
+    {name: "Document", content: "📄"},
+    {name: "Report", content: "📈"},
+    ]
+  const regions = [
+    { name: "Region I", spbus: ["Aceh", "Medan", "Pekanbaru"] },
+    { name: "Region II", spbus: [] },
+    { name: "Region III", spbus: [] },
+    { name: "Region IV", spbus: [] },
+    { name: "Region V", spbus: [] },
+    { name: "Region VI", spbus: [] },
+    { name: "Region VII", spbus: [] },
+  ];
+
+  return (
+    <div>
+      
+    <Navbar 
+      darkMode={darkMode} 
+      sidebarOpen={sidebarOpen} 
+      setSidebarOpen={setSidebarOpen} 
+    />
+    <div className={`block lg:flex bg-gray-100 h-auto ${darkMode ? "dark" : ""} dark:bg-gray-900`}>
+      {/* side bar */}
+      <div className={`fixed bg-white w-64 h-auto shadow ${sidebarOpen ? "translate-x-0" : "-translate-x-64"} lg:translate-x-0 lg:static dark:bg-gray-900`}>
+        <Menu/>
+        <div className='p-4 flex justify-between border-b'>
+          <div className='text-xl font-bold dark:text-gray-100'>Logo</div>
+          <div onClick={() => setSidebarOpen(false)} className='lg:hidden dark:text-gray-100 '>X</div>
+        </div>
+        {/* navigation bar */}
+        {/* <div className='p-4 space-y-2'>
+          {navItems.map(item => {
+            return (
+              <div className='flex p-2 hover:bg-gray-100 rounded-md'>
+                <div className='text-xl'>{item.icon}</div>
+                <div className='text-xl dark:text-gray-100 dark:hover:text-gray-900'>{item.name}</div>
+              </div>
+            )
+          })}
+        </div> */}
+        <div className="p-4 space-y-2">
+            <h3 className="text-sm uppercase text-gray-500 dark:text-gray-400">SPBU LOCATIONS</h3>
+            {regions.map((region, idx) => (
+              <div key={idx} className="mb-2">
+                <div className="flex items-center cursor-pointer p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700">
+                  <span className="mr-2">📍</span>
+                  <span>{region.name}</span>
+                </div>
+                {region.spbus.length > 0 && (
+                  <div className="ml-6 mt-1 space-y-1">
+                    {region.spbus.map((spbu, i) => (
+                      <div key={i} className="text-sm pl-2 py-1 flex items-center">
+                        <span className="mr-1">⭐</span>
+                        <span>{spbu}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        {/* dark mode */}
+        <div className='flex text-2xl justify-left p-4'>
+          {darkMode ? (
+            <button className='p-2 bg-black rounded-full' onClick={() => setDarkMode (false)}>🌞</button> 
+          ) : (
+          <button className='p-2 bg-black rounded-full' onClick={() => setDarkMode(true) }>🌜</button>
+        )}
+        </div>
+      </div>
+
+      {/* main content */}
+      <main className='flex-1 overflow-y-auto p-4'>
+        
+        
+        {/* SPBU Network Map */}
+<div className={`mb-6 p-4 rounded-lg ${darkMode ? 'bg-gray-800' : 'bg-white'} shadow`}>
+  <div className="flex justify-between items-center mb-4">
+    <h2 className="text-xl font-bold flex items-center">
+      <span className="mr-2">📍</span> SPBU Network Map
+    </h2>
+    <div className="flex items-center space-x-2">
+      <input
+        type="text"
+        placeholder="Search region or SPBU..."
+        className={`px-3 py-2 rounded-md border ${darkMode ? 'bg-gray-700 border-gray-600' : 'bg-gray-100 border-gray-300'}`}
+      />
+      <button className={`p-2 rounded ${darkMode ? 'bg-gray-700' : 'bg-gray-200'}`}>+</button>
+      <button className={`p-2 rounded ${darkMode ? 'bg-gray-700' : 'bg-gray-200'}`}>&minus;</button>
+      <button className={`p-2 rounded ${darkMode ? 'bg-gray-700' : 'bg-gray-200'}`}>
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+          <path d="M11 12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v6zm-7 0a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1H4z"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  {/* Kontainer map dengan tinggi tetap */}
+  <div className="h-64 rounded-lg overflow-hidden relative bg-gradient-to-br from-blue-50 to-green-50 dark:from-gray-700 dark:to-gray-800">
+    <iframe
+      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d32659008.493882835!2d95.84784495832173!3d-2.2671055891349647!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2c4c07d7496404b7%3A0xe37b4de71badf485!2sIndonesia!5e0!3m2!1sid!2sid!4v1768191910659!5m2!1sid!2sid"
+      width="100%"
+      height="100%"
+      style={{ border: 0 }}
+      allowFullScreen
+      loading="lazy"
+      referrerPolicy="no-referrer-when-downgrade"
+      title="SPBU Network Map"
+    ></iframe>
+
+    {/* Overlay info (opsional) */}
+    <div className="absolute bottom-2 right-2 bg-blue-600 text-white px-2 py-1 rounded text-xs z-10">
+      🌟 Zoom: 160%
+    </div>
+  </div>
+</div>
+        {/* realtime transaksi */}
+          <Content darkMode={darkMode}/>
+      </main>
+      {/* ringht konten */}
+      {/* <div className='space-y-2 bg-white w-full lg:w-62 h-screen shadow-md p-2'>
+        <h1>Live CCTV</h1>
+        <div className='grid justify-center bg-gray-100 p-2 grid-cols-2 w-full gap-2'>
+          <div className='bg-white p-4'>
+            <h1>cctv 1</h1>
+            <img src="" alt="" />
+          </div>
+          <div className='bg-white p-4'>
+            <h1>cctv 1</h1>
+            <img src="" alt="" />
+          </div>
+          <div className='bg-white p-4'>
+            <h1>cctv 1</h1>
+            <img src="" alt="" />
+          </div>
+          <div className='bg-white p-4'>
+            <h1>cctv 1</h1>
+            <img src="" alt="" />
+          </div>
+          
+        </div>
+        
+        <div className='bg-green-100 border border-green-300 p-2 rounded-sm'>
+          <h2 className='text-md text-green-600'>valid transaction</h2>
+          <p className='text-xl text-green-600'>1,204</p>
+        </div>
+      </div> */}
+      <aside className={`w-full lg:w-80 h-full ${darkMode ? 'bg-gray-800' : 'bg-white'} shadow-lg p-4`}>
+          <h2 className="text-sm font-bold mb-4">LIVE CCTV FEED</h2>
+
+          <div className="grid grid-cols-2 gap-2 mb-4">
+            {['CAM 01', 'CAM 02', 'CAM 03', 'CAM 04'].map((cam, idx) => (
+              <div key={idx} className={`p-2 rounded ${darkMode ? 'bg-gray-700' : 'bg-gray-100'} flex flex-col items-center`}>
+                <div className="w-full h-20 bg-black rounded mb-1 relative">
+                  <div className="absolute top-1 left-1 text-xs bg-red-500 text-white px-1 rounded">LIVE</div>
+                </div>
+                <div className="text-[10px] text-center">{cam}<br/>Dispenser A1</div>
+              </div>
+            ))}
+          </div>
+
+          {/* Statistik */}
+          <div className={`p-4 rounded-lg mb-4 ${darkMode ? 'bg-green-900/20 border border-green-700' : 'bg-green-50 border border-green-200'}`}>
+            <h3 className="text-[10px] font-medium text-green-600">Valid Transactions</h3>
+            <p className="text-md font-bold text-green-600">1,247</p>
+          </div>
+
+          <div className={`p-4 rounded-lg mb-4 ${darkMode ? 'bg-red-900/20 border border-red-700' : 'bg-red-50 border border-red-200'}`}>
+            <h3 className="text-[10px] font-medium text-red-600">Fraud Alerts</h3>
+            <p className="text-md font-bold text-red-600">3</p>
+          </div>
+
+          <div className={`p-4 rounded-lg mb-4 ${darkMode ? 'bg-blue-900/20 border border-blue-700' : 'bg-blue-50 border border-blue-200'}`}>
+            <h3 className="text-[10px] font-medium text-blue-600">Active Dispensers</h3>
+            <p className="text-md font-bold text-blue-600">24</p>
+          </div>
+
+          {/* WhatsApp Alert */}
+          <div className={`p-4 rounded-lg ${darkMode ? 'bg-emerald-900/20 border border-emerald-700' : 'bg-emerald-50 border border-emerald-200'}`}>
+            <div className="flex items-center mb-2">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16" className="text-green-600 mr-2">
+                <path d="M13.626 2.826a6.832 6.832 0 0 0-9.662 0A6.832 6.832 0 0 0 2.826 12.488c1.19.596 2.527.885 3.863.885a6.832 6.832 0 0 0 6.832-6.832c0-1.336-.289-2.673-.885-3.863zM12.488 11.344a5.688 5.688 0 0 1-8.044 0 5.688 5.688 0 0 1 0-8.044 5.688 5.688 0 0 1 8.044 0 5.688 5.688 0 0 1 0 8.044z"/>
+                <path d="M11.344 6.832a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0z"/>
+              </svg>
+              <h3 className="font-medium text-green-600">WhatsApp Alert</h3>
+            </div>
+            <p className="text-xs text-green-600 mb-1">System Active</p>
+            <div className="text-xs text-gray-500 mb-2">
+              Sent Today: <span className="font-semibold">24</span>
+            </div>
+            <div className="text-xs text-gray-500">
+              Last Alert: <span className="font-semibold">23.00.28</span>
+            </div>
+            <button className="mt-2 w-full bg-green-600 hover:bg-green-700 text-white py-1 rounded text-sm">
+              ⚙️ Settings
+            </button>
+          </div>
+        </aside>
+
+      </div>
+    </div>
+  )
+}
+
+export default App
