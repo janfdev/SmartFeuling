@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import Navbar from "./component/navbar"
 import Menu from "./component/menu"
 import Content from './component/content'
-import { Button } from "@/components/ui/button"
+
 
 export const App = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false)
@@ -40,25 +40,16 @@ export const App = () => {
       sidebarOpen={sidebarOpen} 
       setSidebarOpen={setSidebarOpen} 
     />
-    <div className={`block lg:flex bg-gray-100 h-auto ${darkMode ? "dark" : ""} dark:bg-gray-900`}>
+    <div className={`block bg-white z-100 lg:flex bg-gray-100 h-auto ${darkMode ? "dark" : ""} dark:bg-gray-900`}>
       {/* side bar */}
       <div className={`fixed bg-white w-64 h-auto shadow ${sidebarOpen ? "translate-x-0" : "-translate-x-64"} lg:translate-x-0 lg:static dark:bg-gray-900`}>
         <Menu/>
-        <div className='p-4 flex justify-between border-b'>
-          <div className='text-xl font-bold dark:text-gray-100'>Logo</div>
-          <div onClick={() => setSidebarOpen(false)} className='lg:hidden dark:text-gray-100 '>X</div>
+        <div className=' flex justify-between border-b'>
+          <div className='text-xl font-bold dark:text-gray-100'></div>
+          <div onClick={() => setSidebarOpen(false)} className='lg:hidden dark:text-gray-100 px-1'>X</div>
         </div>
         {/* navigation bar */}
-        {/* <div className='p-4 space-y-2'>
-          {navItems.map(item => {
-            return (
-              <div className='flex p-2 hover:bg-gray-100 rounded-md'>
-                <div className='text-xl'>{item.icon}</div>
-                <div className='text-xl dark:text-gray-100 dark:hover:text-gray-900'>{item.name}</div>
-              </div>
-            )
-          })}
-        </div> */}
+      
         <div className="p-4 space-y-2">
             <h3 className="text-sm uppercase text-gray-500 dark:text-gray-400">SPBU LOCATIONS</h3>
             {regions.map((region, idx) => (
@@ -95,46 +86,44 @@ export const App = () => {
         
         
         {/* SPBU Network Map */}
-<div className={`mb-6 p-4 rounded-lg ${darkMode ? 'bg-gray-800' : 'bg-white'} shadow`}>
-  <div className="flex justify-between items-center mb-4">
-    <h2 className="text-xl font-bold flex items-center">
-      <span className="mr-2">📍</span> SPBU Network Map
-    </h2>
-    <div className="flex items-center space-x-2">
-      <input
-        type="text"
-        placeholder="Search region or SPBU..."
-        className={`px-3 py-2 rounded-md border ${darkMode ? 'bg-gray-700 border-gray-600' : 'bg-gray-100 border-gray-300'}`}
-      />
-      <button className={`p-2 rounded ${darkMode ? 'bg-gray-700' : 'bg-gray-200'}`}>+</button>
-      <button className={`p-2 rounded ${darkMode ? 'bg-gray-700' : 'bg-gray-200'}`}>&minus;</button>
-      <button className={`p-2 rounded ${darkMode ? 'bg-gray-700' : 'bg-gray-200'}`}>
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-          <path d="M11 12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v6zm-7 0a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1H4z"/>
-        </svg>
-      </button>
-    </div>
-  </div>
+        <div className={`mb-6 p-4 rounded-lg ${darkMode ? 'bg-gray-800' : 'bg-white'} shadow`}>
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-xl font-bold flex items-center">
+              <span className="mr-2">📍</span> SPBU Network Map
+            </h2>
+            <div className="flex items-center space-x-2">
+              <input
+                type="text"
+                placeholder="Search region or SPBU..."
+                className={`px-3 py-2 rounded-md border ${darkMode ? 'bg-gray-700 border-gray-600' : 'bg-gray-100 border-gray-300'}`}
+              />
+              <button className={`p-2 rounded ${darkMode ? 'bg-gray-700' : 'bg-gray-200'}`}>+</button>
+              <button className={`p-2 rounded ${darkMode ? 'bg-gray-700' : 'bg-gray-200'}`}>&minus;</button>
+              <button className={`p-2 rounded ${darkMode ? 'bg-gray-700' : 'bg-gray-200'}`}>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                  <path d="M11 12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v6zm-7 0a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1H4z"/>
+                </svg>
+              </button>
+            </div>
+          </div>
 
-  {/* Kontainer map dengan tinggi tetap */}
-  <div className="h-64 rounded-lg overflow-hidden relative bg-gradient-to-br from-blue-50 to-green-50 dark:from-gray-700 dark:to-gray-800">
-    <iframe
-      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d32659008.493882835!2d95.84784495832173!3d-2.2671055891349647!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2c4c07d7496404b7%3A0xe37b4de71badf485!2sIndonesia!5e0!3m2!1sid!2sid!4v1768191910659!5m2!1sid!2sid"
-      width="100%"
-      height="100%"
-      style={{ border: 0 }}
-      allowFullScreen
-      loading="lazy"
-      referrerPolicy="no-referrer-when-downgrade"
-      title="SPBU Network Map"
-    ></iframe>
+          {/* Kontainer map dengan tinggi tetap */}
+          <div className="h-64 rounded-lg overflow-hidden relative bg-gradient-to-br from-blue-50 to-green-50 dark:from-gray-700 dark:to-gray-800">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d32659008.493882835!2d95.84784495832173!3d-2.2671055891349647!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2c4c07d7496404b7%3A0xe37b4de71badf485!2sIndonesia!5e0!3m2!1sid!2sid!4v1768191910659!5m2!1sid!2sid"
+              width="100%"
+              height="100%"
+              style={{ border: 0 }}
+              allowFullScreen
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              title="SPBU Network Map"
+            ></iframe>
 
-    {/* Overlay info (opsional) */}
-    <div className="absolute bottom-2 right-2 bg-blue-600 text-white px-2 py-1 rounded text-xs z-10">
-      🌟 Zoom: 160%
-    </div>
-  </div>
-</div>
+            {/* Overlay info (opsional) */}
+            
+          </div>
+        </div>
         {/* realtime transaksi */}
           <Content darkMode={darkMode}/>
       </main>
