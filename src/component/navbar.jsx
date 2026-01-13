@@ -3,10 +3,9 @@ import React from 'react';
 
 const Navbar = ({ darkMode, sidebarOpen, setSidebarOpen }) => {
   return (
-    <header className={`flex justify-between items-center px-6 py-3 ${darkMode ? 'bg-gray-800' : 'bg-white'} shadow`}>
-      <div className="flex items-center space-x-2">
-        <div className="w-8 h-8 bg-blue-600 rounded flex items-center justify-center text-white">SF</div>
-        <h1 className="text-xl font-bold hidden lg:block">Smart Fueling Verification System</h1>
+    <header className={`flex justify-between items-center px-4 lg:px-6 ${darkMode ? 'bg-gray-800' : 'bg-white'} bg-white border-b border-gray-200 sticky top-0 z-50`}>
+      <div className="flex items-center">
+        <img src="/images/logo.png" alt="logo" className='w-[80px]'/>
         <button
           className='p-2 text-xl font-bold lg:hidden dark:text-gray-100'
           onClick={() => setSidebarOpen(true)}

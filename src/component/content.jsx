@@ -21,7 +21,7 @@ const content = ({darkMode}) => {
             <p className="text-[12px] text-gray-500 mb-4">Showing all transactions</p>
 
             <div className="overflow-x-auto overflow-y-auto max-h-[250px] ">
-                <table className="w-full text-[10px] min-w-max">
+                <table className="w-full text-[11px] min-w-max">
                     <thead>
                     <tr className={`border-b 'border-gray-200'}`}>
                         {['Time', 'SPBU', 'Dispenser', 'Vehicle Type', 'License Plate', 'Fuel Type', 'Volume (L)', 'Subsidy Status', 'RFID Match', 'Fraud Detection', 'Evidence'].map((header, idx) => (
