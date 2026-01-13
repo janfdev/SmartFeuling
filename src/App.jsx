@@ -1,4 +1,6 @@
 import React, { useState } from 'react'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHouse, faLocationDot, faBars} from '@fortawesome/free-solid-svg-icons';
 import Navbar from "./component/navbar"
 import Menu from "./component/menu"
 import Content from './component/content'
@@ -48,9 +50,9 @@ export const App = () => {
         
         {/* SPBU Network Map */}
         <div className={`mb-6 p-4 rounded-lg ${darkMode ? 'bg-gray-800' : 'bg-white'} shadow`}>
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-[10px] lg:text-xl font-bold flex items-center">
-              <span className="mr-2">📍</span> SPBU Network Map
+          <div className="flex justify-between items-center mb-4 lg:space-x-0 space-x-1">
+            <h2 className="text-[8px] lg:text-xl font-bold flex items-center">
+              <span className="mr-2 text-blue-600 bg-blue-100 rounded-md p-2"><FontAwesomeIcon icon={faLocationDot} /></span> SPBU Network Map
             </h2>
             <div className="flex items-center space-x-2">
               <input
@@ -58,10 +60,10 @@ export const App = () => {
                 placeholder="Search region or SPBU..."
                 className={`px-3 py-2 rounded-md border lg:w-64 w-[120px] lg:text-sm text-[12px] ${darkMode ? 'bg-gray-700 border-gray-600' : 'bg-gray-100 border-gray-300'}`}
               />
-              <button className={`p-2 rounded text-[8px] ${darkMode ? 'bg-gray-700' : 'bg-gray-200'}`}>+</button>
-              <button className={`p-2 rounded text-[8px] ${darkMode ? 'bg-gray-700' : 'bg-gray-200'}`}>&minus;</button>
+              <button className={`p-2 rounded text-[8px] lg:text-sm ${darkMode ? 'bg-gray-700' : 'bg-gray-200'}`}>+</button>
+              <button className={`p-2 rounded text-[8px] lg:text-sm ${darkMode ? 'bg-gray-700' : 'bg-gray-200'}`}>&minus;</button>
               <button className={`p-2 rounded text-[8px] ${darkMode ? 'bg-gray-700' : 'bg-gray-200'}`}>
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16" className='w-[10px] h-[10px] lg:w-[18px] lg:h-[18px]'>
                   <path d="M11 12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v6zm-7 0a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1H4z"/>
                 </svg>
               </button>

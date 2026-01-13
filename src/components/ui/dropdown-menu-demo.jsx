@@ -1,5 +1,8 @@
 // src/components/ui/dropdown-menu-demo.jsx
 import { Button } from "@/components/ui/button"
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHouse, faLocationDot, faBars} from '@fortawesome/free-solid-svg-icons';
+
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -16,8 +19,8 @@ export function MenuDropdown() {
           variant="outline" 
           className="flex justify-between bg-blue-600 hover:bg-blue-700 w-full text-white border-none"
         >
-            <div className="flex">
-                <h1 className="px-2">=</h1>
+            <div className="flex items-center">
+                <h1 className="px-2 text-xs"><FontAwesomeIcon icon={faBars} /></h1>
                 <h2>Menu</h2>
             </div>
             <div>▼</div>

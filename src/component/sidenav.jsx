@@ -1,12 +1,14 @@
 // src/component/sidenav.jsx
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faHouse } from '@fortawesome/free-regular-svg-icons';
+import { faHouse, faLocationDot, faBars} from '@fortawesome/free-solid-svg-icons';
+
 
 const Sidenav = ({ darkMode, setCurrentMapUrl }) => {
-  const [expandedRegions, setExpandedRegions] = useState({});
-  const [expandedCities, setExpandedCities] = useState({});
-  const [expandedSpbus, setExpandedSpbus] = useState({});
+    const [sidebarOpen, setSidebarOpen] = useState(false)
+    const [expandedRegions, setExpandedRegions] = useState({});
+    const [expandedCities, setExpandedCities] = useState({});
+    const [expandedSpbus, setExpandedSpbus] = useState({});
 
   const regions = [
     {
@@ -107,8 +109,10 @@ const Sidenav = ({ darkMode, setCurrentMapUrl }) => {
 
   return (
     <div className="p-4 space-y-2">
-      <h3 className="text-sm uppercase text-gray-500 dark:text-gray-400">SPBU LOCATIONS</h3>
-
+        <div className={`flex justify-between`}>
+            <h3 className="text-sm uppercase text-gray-500 dark:text-gray-400">SPBU LOCATIONS</h3>
+            <div onClick={() => setSidebarOpen(false)} className='lg:hidden dark:text-gray-100 px-1'>X</div>
+        </div>
       {regions.map((region, idx) => (
         <div key={idx} className="mb-2">
           {/* Region Header */}
@@ -116,11 +120,11 @@ const Sidenav = ({ darkMode, setCurrentMapUrl }) => {
             className="flex items-center cursor-pointer p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700"
             onClick={() => toggleRegion(region.name)}
           >
-            <span className="mr-2">📍</span>
+            <span className="mr-2 text-blue-600"><FontAwesomeIcon icon={faLocationDot} /></span>
             <span>{region.name}</span>
-            <span className="ml-auto text-sm">
+            {/* <span className="ml-auto text-sm">
               {expandedRegions[region.name] ? '▼' : '▶'}
-            </span>
+            </span> */}
           </div>
 
           {/* Cities (Expandable) */}
@@ -133,11 +137,11 @@ const Sidenav = ({ darkMode, setCurrentMapUrl }) => {
                     className="flex items-center cursor-pointer p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-800"
                     onClick={() => toggleCity(city.name)}
                   >
-                    <span className="mr-2 text-[10px] text-blue-900"><FontAwesomeIcon icon={faHouse} /></span>
+                    <span className="mr-2 text-[10px] text-blue-700"><FontAwesomeIcon icon={faHouse} /></span>
                     <span className='text-xs'>{city.name}</span>
-                    <span className="ml-auto text-[10px]">
+                    {/* <span className="ml-auto text-[10px]">
                       {expandedCities[city.name] ? '▼' : '▶'}
-                    </span>
+                    </span> */}
                   </div>
 
                   {/* SPBUs (Expandable) */}
