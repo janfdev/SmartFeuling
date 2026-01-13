@@ -1,67 +1,82 @@
 // src/component/sidenav.jsx
 import React, { useState } from 'react';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faHouse } from '@fortawesome/free-regular-svg-icons';
 
 const Sidenav = ({ darkMode, setCurrentMapUrl }) => {
   const [expandedRegions, setExpandedRegions] = useState({});
   const [expandedCities, setExpandedCities] = useState({});
-  
+  const [expandedSpbus, setExpandedSpbus] = useState({});
 
   const regions = [
     {
       name: "Region I",
-    cities: [
-      {
-        name: "Aceh",
-        spbus: [
-          {
-            name: "11.101.01 - SPBU Banda Aceh",
-            lat: 5.5465,
-            lng: 95.3247,
-            zoom: 17
-          }
-        ]
-      },
-      {
-        name: "Medan",
-        spbus: [
-          {
-            name: "06.123.45 - SPBU Medan",
-            lat: 3.597,
-            lng: 98.675,
-            zoom: 14
-          }
-        ]
-      },
-      {
-        name: "Pekanbaru",
-        spbus: []
-      }
-    ]
-  },
-  {
-    name: "Region II",
-    cities: [
-      {
-        name: "Palembang",
-        spbus: [
-          {
-            name: "16.401.01 - SPBU Dem...",
-            lat: -2.99,
-            lng: 104.75,
-            zoom: 13
-          }
-        ]
-      },
-      {
-        name: "Jambi",
-        spbus: []
-      },
-      {
-        name: "Lampung",
-        spbus: []
-      }
-    ]
-  },
+      cities: [
+        {
+          name: "Aceh",
+          spbus: [
+            {
+              name: "11.101.01 - SPBU Banda Aceh",
+              lat: 5.5465,
+              lng: 95.3247,
+              zoom: 17,
+              dispensers: [
+                { name: "Dispenser A1", lat: 5.5465, lng: 95.3247 },
+                { name: "Dispenser A2", lat: 5.5465, lng: 95.3247 },
+                { name: "Dispenser B1", lat: 5.5465, lng: 95.3247 },
+                { name: "Dispenser B2", lat: 5.5465, lng: 95.3247 }
+              ]
+            }
+          ]
+        },
+        {
+          name: "Medan",
+          spbus: [
+            {
+              name: "06.123.45 - SPBU Medan",
+              lat: 3.597,
+              lng: 98.675,
+              zoom: 14,
+              dispensers: [
+                { name: "Dispenser A1", lat: 3.597, lng: 98.675 },
+                { name: "Dispenser B1", lat: 3.597, lng: 98.675 }
+              ]
+            }
+          ]
+        },
+        {
+          name: "Pekanbaru",
+          spbus: []
+        }
+      ]
+    },
+    {
+      name: "Region II",
+      cities: [
+        {
+          name: "Palembang",
+          spbus: [
+            {
+              name: "16.401.01 - SPBU Dem...",
+              lat: -2.99,
+              lng: 104.75,
+              zoom: 13,
+              dispensers: [
+                { name: "Dispenser A1", lat: -2.99, lng: 104.75 }
+              ]
+            }
+          ]
+        },
+        {
+          name: "Jambi",
+          spbus: []
+        },
+        {
+          name: "Lampung",
+          spbus: []
+        }
+      ]
+    },
     { name: "Region III", cities: [] },
     { name: "Region IV", cities: [] },
     { name: "Region V", cities: [] },
@@ -83,6 +98,13 @@ const Sidenav = ({ darkMode, setCurrentMapUrl }) => {
     }));
   };
 
+  const toggleSpbu = (spbuName) => {
+    setExpandedSpbus(prev => ({
+      ...prev,
+      [spbuName]: !prev[spbuName]
+    }));
+  };
+
   return (
     <div className="p-4 space-y-2">
       <h3 className="text-sm uppercase text-gray-500 dark:text-gray-400">SPBU LOCATIONS</h3>
@@ -96,7 +118,7 @@ const Sidenav = ({ darkMode, setCurrentMapUrl }) => {
           >
             <span className="mr-2">📍</span>
             <span>{region.name}</span>
-            <span className="ml-auto">
+            <span className="ml-auto text-sm">
               {expandedRegions[region.name] ? '▼' : '▶'}
             </span>
           </div>
@@ -111,9 +133,9 @@ const Sidenav = ({ darkMode, setCurrentMapUrl }) => {
                     className="flex items-center cursor-pointer p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-800"
                     onClick={() => toggleCity(city.name)}
                   >
-                    <span className="mr-2">⭐</span>
-                    <span>{city.name}</span>
-                    <span className="ml-auto">
+                    <span className="mr-2 text-[10px] text-blue-900"><FontAwesomeIcon icon={faHouse} /></span>
+                    <span className='text-xs'>{city.name}</span>
+                    <span className="ml-auto text-[10px]">
                       {expandedCities[city.name] ? '▼' : '▶'}
                     </span>
                   </div>
@@ -122,21 +144,37 @@ const Sidenav = ({ darkMode, setCurrentMapUrl }) => {
                   {expandedCities[city.name] && city.spbus.length > 0 && (
                     <div className="ml-6 mt-1 space-y-1">
                       {city.spbus.map((spbu, j) => (
-                        <div
-                            key={j}
-                            className="text-xs pl-2 py-1 flex items-center cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800"
-                            onClick={() => {
-                            const lat = spbu.lat;
-                            const lng = spbu.lng;
-                            const zoom = spbu.zoom || 14;
-                            const url = `https://www.google.com/maps/embed?q=${lat},${lng}&zoom=${zoom}&output=embed`;
-                            setCurrentMapUrl(url);
-                            }}
-                        >
-                            <span className="mr-1">✅</span>
-                            <span>{spbu.name}</span>
+                        <div key={j}>
+                          {/* SPBU Header */}
+                          <div
+                            className="flex items-center cursor-pointer p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-800"
+                            onClick={() => toggleSpbu(spbu.name)}
+                          >
+                            <span className="mr-1 text-[10px]">✅</span>
+                            <span className='text-[10px] '>{spbu.name}</span>
+                            
+                          </div>
+
+                          {/* Dispensers (Expandable) */}
+                          {expandedSpbus[spbu.name] && spbu.dispensers.length > 0 && (
+                            <div className="ml-6 mt-1 space-y-1">
+                              {spbu.dispensers.map((dispenser, k) => (
+                                <div
+                                  key={k}
+                                  className="text-xs pl-2 py-1 flex items-center cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800"
+                                  onClick={() => {
+                                    const url = `https://www.google.com/maps/embed?q=${dispenser.lat},${dispenser.lng}&zoom=${spbu.zoom}&output=embed`;
+                                    setCurrentMapUrl(url);
+                                  }}
+                                >
+                                  <span className="mr-1">🔵</span>
+                                  <span>{dispenser.name}</span>
+                                </div>
+                              ))}
+                            </div>
+                          )}
                         </div>
-                        ))}
+                      ))}
                     </div>
                   )}
                 </div>
