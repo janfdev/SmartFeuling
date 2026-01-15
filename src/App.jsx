@@ -18,7 +18,7 @@ export const App = () => {
   );
 
   return (
-    <div className="h-screen w-full flex flex-col overflow-hidden bg-white dark:bg-slate-950 transition-colors duration-300">
+    <div className="h-auto w-full flex flex-col overflow-hidden bg-white dark:bg-slate-950 transition-colors duration-300">
       <Navbar
         darkMode={darkMode}
         setDarkMode={setDarkMode}
@@ -26,7 +26,7 @@ export const App = () => {
         setSidebarOpen={setSidebarOpen}
       />
       <div
-        className={`flex-1 flex overflow-hidden relative ${
+        className={`flex-1 block lg:flex overflow-hidden relative ${
           darkMode ? "dark bg-slate-950" : "bg-gray-100"
         }`}
       >
@@ -124,7 +124,7 @@ export const App = () => {
         </main>
         {/* ringht konten */}
         <aside
-          className={`hidden lg:block w-80 h-full overflow-y-auto ${
+          className={`w-full  lg:w-80 h-full overflow-y-auto ${
             darkMode
               ? "bg-slate-900 border-l border-slate-800"
               : "bg-white border-l border-gray-200"
