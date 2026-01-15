@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
+import { faLocationDot,faArrowsRotate } from "@fortawesome/free-solid-svg-icons";
 import Navbar from "./components/navbar";
 import Menu from "./components/menu";
 import Content from "./components/content";
@@ -8,6 +8,7 @@ import Sidenav from "./components/sidenav";
 import Modal from "@/components/ui/modal";
 import { Button } from "@/components/ui/button";
 import { FaWhatsapp } from "react-icons/fa";
+import Toaster from "@/components/ui/toaster";
 
 export const App = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -16,9 +17,21 @@ export const App = () => {
   const [currentMapUrl, setCurrentMapUrl] = useState(
     "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d32659008.493882835!2d95.84784495832173!3d-2.2671055891349647!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2c4c07d7496404b7%3A0xe37b4de71badf485!2sIndonesia!5e0!3m2!1sid!2sid!4v1768191910659!5m2!1sid!2sid"
   );
+  const [showToaster, setShowToaster] = useState(false);
+  const [toasterMessage, setToasterMessage] = useState("");
+  const [toasterType, setToasterType] = useState("success");
 
   return (
     <div className="h-auto w-full flex flex-col overflow-hidden bg-white dark:bg-slate-950 transition-colors duration-300">
+      {/* Toaster */}
+      {showToaster && (
+        <Toaster
+          message={toasterMessage}
+          type={toasterType}
+          duration={3000}
+          onClose={() => setShowToaster(false)}
+        />
+      )}
       <Navbar
         darkMode={darkMode}
         setDarkMode={setDarkMode}
@@ -87,18 +100,11 @@ export const App = () => {
                   &minus;
                 </button>
                 <button
-                  className={`p-2 rounded text-[8px] ${
+                  className={`p-2 rounded text-[13px] ${
                     darkMode ? "bg-gray-700" : "bg-gray-200"
                   }`}
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="currentColor"
-                    viewBox="0 0 16 16"
-                    className="w-[10px] h-[10px] lg:w-[18px] lg:h-[18px]"
-                  >
-                    <path d="M11 12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v6zm-7 0a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1H4z" />
-                  </svg>
+                  <FontAwesomeIcon icon={faArrowsRotate} />
                 </button>
               </div>
             </div>
@@ -470,7 +476,12 @@ export const App = () => {
 
           <div className="p-4 border-t flex justify-end gap-3 bg-white rounded-b-lg">
             <Button
-              onClick={() => setIsOpen(false)}
+              onClick={() => {
+                setIsOpen(false);
+                setToasterMessage("Alert settings saved successfully!");
+                setToasterType("success");
+                setShowToaster(true);
+              }}
               className="bg-[#10a37f] hover:bg-green-700 text-white px-8 py-2 w-full sm:w-auto"
             >
               ✓ Save Configuration

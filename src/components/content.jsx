@@ -343,73 +343,77 @@ const Content = ({ darkMode }) => {
           : "bg-white border-white shadow"
       }`}
     >
-      <h2
-        className={`text-sm font-bold mb-2 ${
-          darkMode ? "text-slate-100" : "text-gray-900"
-        }`}
-      >
-        Real-Time Transaction Log
-      </h2>
-      {/* ✅ UI Filter Bar */}
-      <div className="flex flex-wrap gap-2 mb-3">
-        {/* Subsidy Filter */}
-        <select
-          value={filters.subsidy}
-          onChange={(e) => setFilters(prev => ({ ...prev, subsidy: e.target.value }))}
-          className={`px-2 py-1 text-xs rounded border ${darkMode ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300'}`}
+      <div className="flex justify-between">
+        <h2
+          className={`text-sm font-bold mb-2 ${
+            darkMode ? "text-slate-100" : "text-gray-900"
+          }`}
         >
-          <option value="">All Subsidy</option>
-          {uniqueSubsidy.map((val, i) => (
-            <option key={i} value={val}>{val}</option>
-          ))}
-        </select>
+          Real-Time Transaction Log
+        </h2>
+        {/* ✅ UI Filter Bar */}
+        <div className="block flex-wrap space-y-1 mb-3">
+          {/* Subsidy Filter */}
+          {/* <select
+            value={filters.subsidy}
+            onChange={(e) => setFilters(prev => ({ ...prev, subsidy: e.target.value }))}
+            className={`px-2 py-1 text-xs rounded border ${darkMode ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300'}`}
+          >
+            <option value="">All Subsidy</option>
+            {uniqueSubsidy.map((val, i) => (
+              <option key={i} value={val}>{val}</option>
+            ))}
+          </select> */}
 
-        {/* RFID Filter */}
-        <select
-          value={filters.rfid}
-          onChange={(e) => setFilters(prev => ({ ...prev, rfid: e.target.value }))}
-          className={`px-2 py-1 text-xs rounded border ${darkMode ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300'}`}
-        >
-          <option value="">All RFID</option>
-          {uniqueRfid.map((val, i) => (
-            <option key={i} value={val}>{val}</option>
-          ))}
-        </select>
+          {/* RFID Filter */}
+          {/* <select
+            value={filters.rfid}
+            onChange={(e) => setFilters(prev => ({ ...prev, rfid: e.target.value }))}
+            className={`px-2 py-1 text-xs rounded border ${darkMode ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300'}`}
+          >
+            <option value="">All RFID</option>
+            {uniqueRfid.map((val, i) => (
+              <option key={i} value={val}>{val}</option>
+            ))}
+          </select> */}
 
-        {/* Fraud Detection Filter */}
-        <select
-          value={filters.fraud}
-          onChange={(e) => setFilters(prev => ({ ...prev, fraud: e.target.value }))}
-          className={`px-2 py-1 text-xs rounded border ${darkMode ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300'}`}
-        >
-          <option value="">All Fraud</option>
-          {uniqueFraud.map((val, i) => (
-            <option key={i} value={val}>{val}</option>
-          ))}
-        </select>
+          <div className="space-x-2">
+          {/* Fraud Detection Filter */}
+          <select
+            value={filters.fraud}
+            onChange={(e) => setFilters(prev => ({ ...prev, fraud: e.target.value }))}
+            className={`px-2 py-1 text-xs rounded border ${darkMode ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300'}`}
+          >
+            <option value="">All Fraud</option>
+            {uniqueFraud.map((val, i) => (
+              <option key={i} value={val}>{val}</option>
+            ))}
+          </select>
 
-        {/* Reset Button */}
-        <button
-          onClick={resetFilters}
-          className={`px-2 py-1 text-xs rounded ${darkMode ? 'bg-gray-700 text-gray-300' : 'bg-gray-200 text-gray-700'}`}
+          {/* Reset Button */}
+          <button
+            onClick={resetFilters}
+            className={`px-2 py-1 text-xs rounded ${darkMode ? 'bg-gray-700 text-gray-300' : 'bg-gray-200 text-gray-700'}`}
+          >
+            Reset
+          </button>
+        </div>
+
+        <p
+          className={`text-[12px] mb-2 ${
+            darkMode ? "text-slate-400" : "text-gray-500"
+          }`}
         >
-          Reset
-        </button>
+          Showing {filteredTransactions.length} of {transactions.length} transactions
+        </p>
+        </div>
       </div>
 
-      <p
-        className={`text-[12px] mb-2 ${
-          darkMode ? "text-slate-400" : "text-gray-500"
-        }`}
-      >
-        Showing {filteredTransactions.length} of {transactions.length} transactions
-      </p>
-
-      <div className="overflow-x-auto overflow-y-auto max-h-[250px] ">
-        <table className="w-full text-[11px] min-w-max">
+      <div className="overflow-x-auto h-64">
+        <table className="w-full text-[11px] min-w-max border-collapse">
           <thead>
             <tr
-              className={`border-b ${
+              className={`border-b  ${
                 darkMode
                   ? "border-slate-700 text-slate-300"
                   : "border-gray-200 text-gray-700"
@@ -436,7 +440,7 @@ const Content = ({ darkMode }) => {
               ))}
             </tr>
           </thead>
-          <tbody>
+          <tbody className="overflow-y-auto">
             {/* ✅ Gunakan filteredTransactions */}
             {filteredTransactions.map((t, idx) => (
               <tr
