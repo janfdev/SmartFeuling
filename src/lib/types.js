@@ -65,19 +65,3 @@ export const UI_STRINGS = {
   ALL_FRAUD: "All Fraud",
   RESET: "Reset",
 };
-
-/**
- * @typedef {Object} Transaction
- * @property {string} time - Transaction time (HH:MM:SS)
- * @property {string} spbu - SPBU location name
- * @property {string} dispenser - Dispenser ID
- * @property {string} vehicle - Vehicle type
- * @property {string} brand - Vehicle brand
- * @property {string} color - Vehicle color
- * @property {string} plate - License plate number
- * @property {string} fuel - Fuel type
- * @property {string} volume - Fuel volume in liters
- * @property {string} subsidy - Subsidy status
- * @property {string} rfid - RFID match status
- * @property {string|null} fraud - Fraud detection result
- */
