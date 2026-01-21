@@ -7,6 +7,7 @@ import { SUBSIDY_STATUS, RFID_STATUS, VEHICLE_TYPE, FUEL_TYPE } from "./types";
 
 export const mockTransactions = [
   {
+    id: 1,
     time: "14:23:45",
     spbu: "SPBU Pasteur",
     dispenser: "A1",

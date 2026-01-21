@@ -1,4 +1,5 @@
-import React, { useState, useMemo } from "react";
+// src/component/content.jsx
+import React, { useState, useMemo, useEffect } from "react";
 import {
   Video,
   Image as ImageIcon,
@@ -21,6 +22,9 @@ import { TABLE_HEADERS, UI_STRINGS, FRAUD_TYPE } from "@/lib/types";
 
 const Content = ({ darkMode }) => {
   const [selectedTx, setSelectedTx] = useState(null);
+  const [isColumnMenuOpen, setIsColumnMenuOpen] = useState(false);
+  const [visibleColumns, setVisibleColumns] = useState(TABLE_HEADERS);
+  
   const [filters, setFilters] = useState({
     subsidy: "",
     rfid: "",
@@ -42,31 +46,45 @@ const Content = ({ darkMode }) => {
     }));
   }, []);
 
-  // Filter transaksi
   const filteredTransactions = useMemo(() => {
     return filterTransactions(transactionsWithFraud, filters);
   }, [filters, transactionsWithFraud]);
 
-  // Get unique fraud values for dropdown
   const uniqueFraud = useMemo(
     () => getUniqueValues(transactionsWithFraud, "fraudDetection"),
     [transactionsWithFraud]
   );
 
-  // Reset filter function
   const resetFilters = () => {
     setFilters({ subsidy: "", rfid: "", fraud: "" });
   };
 
-  // Helper function to get badge color for status
   const getStatusBadgeColor = (status) => {
     return STATUS_BADGE_COLORS[status] || "bg-gray-100 text-gray-800";
   };
 
-  // Helper function to get badge color for fraud type
   const getFraudBadgeColor = (fraudType) => {
     return FRAUD_BADGE_COLORS[fraudType] || "bg-gray-100 text-gray-800";
   };
+
+  // 🔧 Perbaikan: handle klik luar dropdown
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      const columnButton = e.target.closest('.column-toggle');
+      const columnMenu = e.target.closest('.column-menu');
+      if (!columnButton && !columnMenu) {
+        setIsColumnMenuOpen(false);
+      }
+    };
+
+    if (isColumnMenuOpen) {
+      document.addEventListener('click', handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, [isColumnMenuOpen]);
+  
 
   return (
     <div
@@ -76,7 +94,7 @@ const Content = ({ darkMode }) => {
           : "bg-white border-white shadow"
       }`}
     >
-      <div className="flex justify-between">
+        <div className="flex justify-between">
         <h2
           className={`text-sm font-bold mb-2 ${
             darkMode ? "text-slate-100" : "text-gray-900"
@@ -84,34 +102,56 @@ const Content = ({ darkMode }) => {
         >
           {UI_STRINGS.TITLE}
         </h2>
-        {/* ✅ UI Filter Bar */}
+        
+        <div className="flex justify-end">
+        <div className="relative mb-3">
+        <button
+          className={`column-toggle px-3 py-1 text-xs rounded border flex items-center gap-1 ${
+            darkMode ? "bg-gray-700 border-gray-600 text-white" : "bg-white border-gray-300"
+          }`}
+          onClick={() => setIsColumnMenuOpen(!isColumnMenuOpen)}
+        >
+          Columns ▼
+        </button>
+
+        {isColumnMenuOpen && (
+          <div
+            className={`column-menu absolute z-10 mt-1 w-48 p-2 rounded shadow-lg ${
+              darkMode ? "bg-slate-800 border border-slate-700" : "bg-white border border-gray-200"
+            }`}
+            style={{ maxHeight: '200px', overflowY: 'auto' }}
+          >
+            <h4 className="text-[10px] font-medium mb-1 px-1">Show Columns:</h4>
+            {TABLE_HEADERS.map((header) => (
+              <label 
+                key={header} 
+                className="flex items-center text-[11px] py-1 px-1 hover:bg-gray-100 dark:hover:bg-slate-700 rounded"
+              >
+                <input
+                  type="checkbox"
+                  checked={visibleColumns.includes(header)}
+                  onChange={(e) => {
+                    setVisibleColumns(prev => {
+                      const newSet = new Set(prev);
+                      if (e.target.checked) {
+                        newSet.add(header);
+                      } else {
+                        newSet.delete(header);
+                      }
+                      return TABLE_HEADERS.filter(col => newSet.has(col));
+                    });
+                  }}
+                  className="mr-2 w-3 h-3"
+                />
+                {header}
+              </label>
+            ))}
+          </div>
+        )}
+      </div>
+      
         <div className="block flex-wrap space-y-1 mb-3">
-          {/* Subsidy Filter */}
-          {/* <select
-            value={filters.subsidy}
-            onChange={(e) => setFilters(prev => ({ ...prev, subsidy: e.target.value }))}
-            className={`px-2 py-1 text-xs rounded border ${darkMode ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300'}`}
-          >
-            <option value="">All Subsidy</option>
-            {uniqueSubsidy.map((val, i) => (
-              <option key={i} value={val}>{val}</option>
-            ))}
-          </select> */}
-
-          {/* RFID Filter */}
-          {/* <select
-            value={filters.rfid}
-            onChange={(e) => setFilters(prev => ({ ...prev, rfid: e.target.value }))}
-            className={`px-2 py-1 text-xs rounded border ${darkMode ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300'}`}
-          >
-            <option value="">All RFID</option>
-            {uniqueRfid.map((val, i) => (
-              <option key={i} value={val}>{val}</option>
-            ))}
-          </select> */}
-
           <div className="space-x-2">
-            {/* Fraud Detection Filter */}
             <select
               value={filters.fraud}
               onChange={(e) =>
@@ -131,7 +171,6 @@ const Content = ({ darkMode }) => {
               ))}
             </select>
 
-            {/* Reset Button */}
             <button
               onClick={resetFilters}
               className={`px-2 py-1 text-xs rounded ${
@@ -155,92 +194,99 @@ const Content = ({ darkMode }) => {
             )}
           </p>
         </div>
+        </div>
+        
       </div>
 
+      {/* 🔧 Filter Kolom */}
+      
+
+      {/* 🔧 Tabel dengan kolom dinamis */}
       <div className="overflow-x-auto h-64">
         <table className="w-full text-[11px] min-w-max border-collapse">
           <thead>
-            <tr
-              className={`border-b  ${
-                darkMode
-                  ? "border-slate-700 text-slate-300"
-                  : "border-gray-200 text-gray-700"
-              }`}
-            >
-              {TABLE_HEADERS.map((header, idx) => (
-                <th key={idx} className="py-2 px-2 text-left whitespace-nowrap">
+            <tr className={`border-b ${darkMode ? "border-slate-700 text-slate-300" : "border-gray-200 text-gray-700"}`}>
+              {visibleColumns.map((header, idx) => (
+                <th key={idx} className="py-2 px-2 text-left whitespace-nowrap sticky top-0 bg-white dark:bg-slate-900">
                   {header}
                 </th>
               ))}
             </tr>
           </thead>
-          <tbody className="overflow-y-auto">
-            {/* ✅ Gunakan filteredTransactions */}
+          <tbody>
             {filteredTransactions.map((t, idx) => (
-              <tr
-                key={idx}
-                className={`border-b border-gray-100 dark:border-slate-800 hover:bg-gray-50 dark:hover:bg-slate-800/50 transition-colors ${
+              <tr 
+                key={idx} 
+                className={`border-b ${darkMode ? "border-slate-800 hover:bg-slate-800/50" : "border-gray-200 hover:bg-gray-50"} ${
                   darkMode ? "text-slate-300" : "text-gray-600"
                 }`}
               >
-                <td className="py-2 px-2 whitespace-nowrap">{t.time}</td>
-                <td className="py-2 px-2 whitespace-nowrap">{t.spbu}</td>
-                <td className="py-2 px-2 whitespace-nowrap">{t.dispenser}</td>
-                <td className="py-2 px-2 whitespace-nowrap">{t.vehicle}</td>
-                <td className="py-2 px-2 whitespace-nowrap">{t.brand}</td>
-                <td className="py-2 px-2 whitespace-nowrap">{t.color}</td>
-                <td className="py-2 px-2 whitespace-nowrap">{t.plate}</td>
-                <td className="py-2 px-2 whitespace-nowrap">{t.fuel}</td>
-                <td className="py-2 px-2 whitespace-nowrap">{t.volume}</td>
-                <td className="py-2 px-2 whitespace-nowrap">
-                  <span
-                    className={`px-2 py-1 rounded text-xs ${getStatusBadgeColor(
-                      t.subsidy
-                    )}`}
-                  >
-                    {t.subsidy}
-                  </span>
-                </td>
-                <td className="py-2 px-2 whitespace-nowrap">
-                  <span
-                    className={`px-2 py-1 rounded text-xs ${getStatusBadgeColor(
-                      t.rfid
-                    )}`}
-                  >
-                    {t.rfid}
-                  </span>
-                </td>
-                <td className="py-2 px-2 whitespace-nowrap">
-                  <span
-                    className={`px-2 py-1 rounded text-xs ${getFraudBadgeColor(
-                      t.fraudDetection
-                    )}`}
-                  >
-                    {t.fraudDetection}
-                  </span>
-                </td>
-                <td className="py-2 px-2 whitespace-nowrap">
-                  {t.fraudDetection === FRAUD_TYPE.NO_FRAUD ? (
-                    <button onClick={() => openModal(t)}>
-                      <Video className="text-blue-700" size={20} />
-                    </button>
-                  ) : (
-                    <div className="flex items-center gap-3">
-                      <button
-                        onClick={() => openModal(t)}
-                        className="relative inline-flex focus:outline-none"
-                      >
-                        <span className="absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75 animate-ping"></span>
-                        <span className="relative text-red-500">
-                          <Video className="text-red-500" size={20} />
-                        </span>
-                      </button>
-                      <button onClick={() => openModal(t)}>
-                        <ImageIcon className="text-orange-500" size={20} />
-                      </button>
-                    </div>
-                  )}
-                </td>
+                {visibleColumns.map((col, i) => {
+                  switch (col) {
+                    case "Time": return <td key={i} className="py-2 px-2 whitespace-nowrap">{t.time}</td>;
+                    case "SPBU": return <td key={i} className="py-2 px-2 whitespace-nowrap">{t.spbu}</td>;
+                    case "Dispenser": return <td key={i} className="py-2 px-2 whitespace-nowrap">{t.dispenser}</td>;
+                    case "Vehicle Type": return <td key={i} className="py-2 px-2 whitespace-nowrap">{t.vehicle}</td>;
+                    case "Brand": return <td key={i} className="py-2 px-2 whitespace-nowrap">{t.brand}</td>;
+                    case "Color": return <td key={i} className="py-2 px-2 whitespace-nowrap">{t.color}</td>;
+                    case "License Plate": return <td key={i} className="py-2 px-2 whitespace-nowrap">{t.plate}</td>;
+                    case "Fuel Type": return <td key={i} className="py-2 px-2 whitespace-nowrap">{t.fuel}</td>;
+                    case "Volume (L)": return <td key={i} className="py-2 px-2 whitespace-nowrap">{t.volume}</td>;
+                    
+                    case "Subsidy Status":
+                      return (
+                        <td key={i} className="py-2 px-2 whitespace-nowrap">
+                          <span className={`px-2 py-1 rounded text-xs ${getStatusBadgeColor(t.subsidy)}`}>
+                            {t.subsidy}
+                          </span>
+                        </td>
+                      );
+                    
+                    case "RFID Match":
+                      return (
+                        <td key={i} className="py-2 px-2 whitespace-nowrap">
+                          <span className={`px-2 py-1 rounded text-xs ${getStatusBadgeColor(t.rfid)}`}>
+                            {t.rfid}
+                          </span>
+                        </td>
+                      );
+                    
+                    case "Fraud Detection":
+                      return (
+                        <td key={i} className="py-2 px-2 whitespace-nowrap">
+                          <span className={`px-2 py-1 rounded text-xs ${getFraudBadgeColor(t.fraudDetection)}`}>
+                            {t.fraudDetection}
+                          </span>
+                        </td>
+                      );
+                    
+                    case "Evidence":
+                      return (
+                        <td key={i} className="py-2 px-2 whitespace-nowrap">
+                          {t.fraudDetection === FRAUD_TYPE.NO_FRAUD ? (
+                            <button onClick={() => openModal(t)}>
+                              <Video className="text-blue-700" size={20} />
+                            </button>
+                          ) : (
+                            <div className="flex items-center gap-3">
+                              <button onClick={() => openModal(t)} className="relative inline-flex">
+                                <span className="absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75 animate-ping"></span>
+                                <span className="relative text-red-500">
+                                  <Video className="text-red-500" size={20} />
+                                </span>
+                              </button>
+                              <button onClick={() => openModal(t)}>
+                                <ImageIcon className="text-orange-500" size={20} />
+                              </button>
+                            </div>
+                          )}
+                        </td>
+                      );
+                    
+                    default:
+                      return <td key={i}></td>;
+                  }
+                })}
               </tr>
             ))}
           </tbody>
